@@ -1,0 +1,18 @@
+#version 330
+
+in vec2 textureCoords; 
+
+uniform sampler2D sunTexture;
+
+layout (location = 0) out vec4 out_Colour;
+layout (location = 1) out vec4 out_BrightColour;
+layout (location = 2) out vec4 out_LightShaftColour;
+
+void main(void){
+
+	out_Colour = texture(sunTexture, textureCoords);
+	float brightness = out_Colour.r * 0.2126 + out_Colour.g * 0.7152 + out_Colour.b * 0.0722;
+	out_BrightColour = out_Colour * brightness;
+	out_LightShaftColour = out_Colour;
+
+}

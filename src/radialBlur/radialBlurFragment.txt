@@ -1,0 +1,36 @@
+#version 330
+
+in vec2 textureCoords;
+
+out vec4 out_Colour;
+
+uniform sampler2D colourTexture;
+uniform vec2 radialBlurCenter;
+
+uniform float exposure;
+uniform float decline;
+uniform float density;
+uniform float weight;
+uniform int numSamples;
+
+
+void main(void){
+
+	vec2 deltaTextureCoords = textureCoords - radialBlurCenter;
+	vec2 texCoords = textureCoords;
+	
+	deltaTextureCoords *= 1.0 /  float(numSamples) * density;
+	float illuminationDecline = 1.0;
+	
+	out_Colour = vec4(0.0, 0.0, 0.0, 0.0);
+	
+	for(int i = 0; i < numSamples ; i++){
+		texCoords -= deltaTextureCoords;
+		vec4 sampleColour = texture(colourTexture, texCoords );
+		sampleColour *= illuminationDecline * weight;
+		out_Colour += sampleColour;
+		illuminationDecline *= decline;
+	}
+	
+	out_Colour *= exposure;
+}

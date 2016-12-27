@@ -1,0 +1,23 @@
+#version 330
+
+in vec2 textureCoords1;
+in vec2 textureCoords2;
+in float blend;
+
+layout (location = 0) out vec4 out_Colour;
+layout (location = 1) out vec4 out_BrightColour;
+layout (location = 2) out vec4 out_LightShaftColour;
+
+uniform sampler2D particleTexture;
+
+
+void main(void){
+	
+	vec4 colour1 = texture(particleTexture, textureCoords1);
+	vec4 colour2 = texture(particleTexture, textureCoords2);
+	
+	out_Colour = mix(colour1, colour2, blend);
+	float brightness = out_Colour.r * 0.2126 + out_Colour.g * 0.7152 + out_Colour.b * 0.0722;
+	out_BrightColour = out_Colour * brightness;
+	out_LightShaftColour = vec4(0.0, 0.0, 0.0, 1.0);
+}
